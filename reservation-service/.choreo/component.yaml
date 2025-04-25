@@ -25,4 +25,4 @@ endpoints:
     type: REST
     networkVisibilities:
       - Public
-    schemaFilePath: reservation-service/docs/openapi.yaml
+    schemaFilePath: docs/openapi.yaml

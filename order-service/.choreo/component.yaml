@@ -25,4 +25,4 @@ endpoints:
     type: REST
     networkVisibilities:
       - Public
-    schemaFilePath: order-service/docs/openapi.yaml
+    schemaFilePath: docs/openapi.yaml
