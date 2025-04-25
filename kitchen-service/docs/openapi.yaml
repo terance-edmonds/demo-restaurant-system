@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: Kitchen Service API
+  description: API for managing processed orders in the restaurant system.
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /kitchen/orders:
+    post:
+      summary: Create a new processed order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+              required:
+                - status
+      responses:
+        '200':
+          description: Processed order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessedOrder'
+        '400':
+          description: Invalid request
+    get:
+      summary: List all processed orders
+      responses:
+        '200':
+          description: List of processed orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessedOrder'
+  /kitchen/orders/{id}:
+    get:
+      summary: Get a processed order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Processed order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessedOrder'
+        '404':
+          description: Processed order not found
+    put:
+      summary: Update a processed order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessedOrder'
+      responses:
+        '200':
+          description: Processed order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessedOrder'
+        '404':
+          description: Processed order not found
+    delete:
+      summary: Delete a processed order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Processed order deleted
+        '404':
+          description: Processed order not found
+components:
+  schemas:
+    ProcessedOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+      required:
+        - status
