@@ -1,0 +1,22 @@
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+bin/
+
+# Docker
+*.log
+Dockerfile.*
+
+# IDEs
+.idea/
+.vscode/
+
+# Misc
+*.swp
+*.swo
