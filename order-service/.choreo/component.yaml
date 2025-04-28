@@ -26,3 +26,7 @@ endpoints:
     networkVisibilities:
       - Public
     schemaFilePath: docs/openapi.yaml
+
+environmentVariables:
+  - name: MENU_SERVICE_URL
+    value: http://menu-service:8081

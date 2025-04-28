@@ -49,6 +49,13 @@ cd order-service
 go mod init order_service
 go run order_service.go
 ```
+
+Update environment variables
+
+```env
+MENU_SERVICE_URL=http://menu-service:8081
+```
+
 Runs on `http://localhost:8082`. Requires Menu Service running.
 
 #### Kitchen Service
@@ -65,6 +72,13 @@ cd payment-service
 go mod init payment_service
 go run payment_service.go
 ```
+
+Update environment variables
+
+```env
+ORDER_SERVICE_URL=http://localhost:8082
+```
+
 Runs on `http://localhost:8084`. Requires Order Service running.
 
 #### Reservation Service

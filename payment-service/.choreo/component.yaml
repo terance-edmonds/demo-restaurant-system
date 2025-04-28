@@ -26,3 +26,7 @@ endpoints:
     networkVisibilities:
       - Public
     schemaFilePath: docs/openapi.yaml
+
+environmentVariables:
+  - name: ORDER_SERVICE_URL
+    value: http://order-service:8082

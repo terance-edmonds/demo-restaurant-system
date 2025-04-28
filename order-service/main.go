@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -37,7 +38,11 @@ func calculateTotal(itemIDs []int, menu []MenuItem) float64 {
 }
 
 func validateItems(itemIDs []int) ([]MenuItem, bool) {
-	resp, err := http.Get("http://menu-service:8081/menu")
+	menuServiceURL := os.Getenv("MENU_SERVICE_URL")
+	if menuServiceURL == "" {
+		menuServiceURL = "http://menu-service:8081" // Fallback
+	}
+	resp, err := http.Get(menuServiceURL + "/menu")
 	if err != nil {
 		return nil, false
 	}
@@ -46,9 +51,10 @@ func validateItems(itemIDs []int) ([]MenuItem, bool) {
 	if err != nil {
 		return nil, false
 	}
-	return nil, false
 	var menu []MenuItem
-	json.Unmarshal(body, &menu)
+	if err := json.Unmarshal(body, &menu); err != nil {
+		return nil, false
+	}
 	for _, id := range itemIDs {
 		found := false
 		for _, item := range menu {

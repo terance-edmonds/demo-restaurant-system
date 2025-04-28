@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -26,7 +27,11 @@ var payments = []Payment{}
 var paymentID = 1
 
 func validateOrder(orderID int) (float64, bool) {
-	resp, err := http.Get("http://order-service:8082/orders")
+	orderServiceURL := os.Getenv("ORDER_SERVICE_URL")
+	if orderServiceURL == "" {
+		orderServiceURL = "http://order-service:8082" // Fallback
+	}
+	resp, err := http.Get(orderServiceURL + "/orders")
 	if err != nil {
 		return 0, false
 	}
@@ -36,7 +41,9 @@ func validateOrder(orderID int) (float64, bool) {
 		return 0, false
 	}
 	var orders []Order
-	json.Unmarshal(body, &orders)
+	if err := json.Unmarshal(body, &orders); err != nil {
+		return 0, false
+	}
 	for _, order := range orders {
 		if order.ID == orderID {
 			return order.Total, true
