@@ -1,6 +1,6 @@
 FROM golang:1.21-alpine
 WORKDIR /app
-COPY kitchen_service.go .
+COPY main.go .
 RUN go mod init kitchen_service
 RUN go build -o kitchen_service
 EXPOSE 8083
