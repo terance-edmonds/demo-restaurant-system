@@ -1,10 +1,14 @@
 # Scheduler Service
 
-The Scheduler Service invokes the GET endpoints of the restaurant system’s microservices (Menu, Order, Kitchen, Payment, Reservation) to monitor their availability. It supports triggering these calls via a REST API, with Choreo’s scheduler initiating periodic executions.
+The Scheduler Service invokes the GET endpoints of the restaurant system’s microservices (Menu, Order, Kitchen, Payment, Reservation) to monitor their availability. It executes these calls upon running and exits, with Choreo’s scheduler triggering periodic executions.
 
-## API Endpoints
-- `POST /trigger`: Trigger calls to all GET endpoints (e.g., Menu’s `/menu`, Order’s `/orders`).
-- `GET /health`: Check the service’s health status.
+## Execution Details
+The service calls the following GET endpoints:
+- Menu Service: `GET /menu` (e.g., `http://localhost:8081/menu`)
+- Order Service: `GET /orders` (e.g., `http://localhost:8082/orders`)
+- Kitchen Service: `GET /kitchen/orders` (e.g., `http://localhost:8083/kitchen/orders`)
+- Payment Service: `GET /payments` (e.g., `http://localhost:8084/payments`)
+- Reservation Service: `GET /reservations` (e.g., `http://localhost:8085/reservations`)
 
 ## Local Setup
 1. Ensure the Menu, Order, Kitchen, Payment, and Reservation Services are running:
@@ -33,11 +37,10 @@ The Scheduler Service invokes the GET endpoints of the restaurant system’s mic
    ```bash
    go run scheduler_service.go
    ```
-   The service runs on `http://localhost:8086`.
+   The service executes, calls the GET endpoints, and exits.
 
 ## Choreo Deployment
-- The `component.yaml` configures the service for Choreo, exposing the API on port 8086.
-- The `docs/openapi.yaml` defines the API schema.
+- The `component.yaml` configures the service as a Scheduled Task for Choreo, running every 5 minutes by default.
 - Set the following environment variables in Choreo:
   - `MENU_SERVICE_URL` (e.g., `http://menu-service:8081` or Choreo’s assigned URL)
   - `ORDER_SERVICE_URL` (e.g., `http://order-service:8082` or Choreo’s assigned URL)
@@ -46,9 +49,9 @@ The Scheduler Service invokes the GET endpoints of the restaurant system’s mic
   - `RESERVATION_SERVICE_URL` (e.g., `http://reservation-service:8085` or Choreo’s assigned URL)
   - `API_TOKEN` (OAuth token or API key for authentication, if required)
 - Deploy via Choreo UI or CLI, connecting to the GitHub repository’s `scheduler-service/` directory.
-- Configure a scheduled task in Choreo to invoke `POST /trigger` periodically (e.g., every 5 minutes using cron `*/5 * * * *`).
+- The scheduled task runs the service periodically (e.g., every 5 minutes, configurable via `component.yaml`).
 
 ## Notes
 - Requires Menu, Order, Kitchen, Payment, and Reservation Services for invoking their GET endpoints.
-- Logs API call results in memory, resetting on restart.
-- Test endpoints using `curl` or the Postman collection in the root `docs/` directory.
+- Logs API call results to the console, resetting on each run.
+- Test other services’ endpoints using `curl` or the Postman collection in the root `docs/` directory.
