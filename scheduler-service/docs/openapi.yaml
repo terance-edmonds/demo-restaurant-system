@@ -1,0 +1,47 @@
+openapi: 3.0.3
+info:
+  title: Scheduler Service API
+  version: 1.0.0
+  description: API for triggering and monitoring the Scheduler Service, which invokes GET endpoints of restaurant system microservices.
+servers:
+  - url: https://<bijira-prefix>.bijiraapis.dev/restaurant-management/scheduler-service-api/v1.0
+    description: Production server
+paths:
+  /health:
+    get:
+      summary: Check the health of the Scheduler Service
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Scheduler Service is healthy
+  /trigger:
+    post:
+      summary: Trigger calls to GET endpoints of restaurant system services
+      responses:
+        '200':
+          description: Summary of API call results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    service:
+                      type: string
+                      example: Menu
+                    url:
+                      type: string
+                      example: https://<bijira-prefix>.bijiraapis.dev/restaurant-management/menu-service-api/v1.0/menu
+                    status:
+                      type: string
+                      example: 200 OK
+                    error:
+                      type: string
+                      example: Timeout
+        '500':
+          description: Internal server error (e.g., missing URL)
