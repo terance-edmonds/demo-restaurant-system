@@ -31,7 +31,7 @@ func main() {
 	}
 
 	// Call APIs
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 60 * time.Second}
 	for service, url := range urls {
 		log.Printf("Calling %s service: %s", service, url)
 		req, err := http.NewRequest("GET", url, nil)
